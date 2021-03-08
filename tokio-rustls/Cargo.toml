@@ -15,6 +15,7 @@ edition = "2018"
 tokio = "1.0"
 rustls = "0.19"
 webpki = "0.21"
+tracing = { version = "0.1.25", optional = true, default-features = false }
 
 [features]
 early-data = []

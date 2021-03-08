@@ -9,6 +9,31 @@ macro_rules! ready {
     };
 }
 
+#[cfg(not(feature = "tracing"))]
+macro_rules! trace {
+    ($($t:tt)+) => {};
+}
+
+#[cfg(not(feature = "tracing"))]
+macro_rules! debug {
+    ($($t:tt)+) => {};
+}
+
+#[cfg(not(feature = "tracing"))]
+macro_rules! trace_span {
+    ($($t:tt)+) => {};
+}
+
+#[cfg(feature = "tracing")]
+macro_rules! trace_span {
+    ($($t:tt)+) => {
+        tracing::trace_span!($($t)+).entered()
+    };
+}
+
+#[cfg(feature = "tracing")]
+pub(crate) use tracing::trace;
+
 pub mod client;
 mod common;
 pub mod server;
