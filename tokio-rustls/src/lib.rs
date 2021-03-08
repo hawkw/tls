@@ -9,19 +9,24 @@ macro_rules! ready {
     };
 }
 
+// === tracing disabled ===
 #[cfg(not(feature = "tracing"))]
 macro_rules! trace {
     ($($t:tt)+) => {};
 }
 
 #[cfg(not(feature = "tracing"))]
-macro_rules! debug {
-    ($($t:tt)+) => {};
+macro_rules! trace_span {
+    ($($t:tt)+) => {
+        ()
+    };
 }
 
-#[cfg(not(feature = "tracing"))]
-macro_rules! trace_span {
-    ($($t:tt)+) => {};
+// === tracing enabled ===
+
+#[cfg(feature = "tracing")]
+macro_rules! trace {
+    ($($t:tt)+) => { tracing::trace!($($t)+)} ;
 }
 
 #[cfg(feature = "tracing")]
@@ -30,9 +35,6 @@ macro_rules! trace_span {
         tracing::trace_span!($($t)+).entered()
     };
 }
-
-#[cfg(feature = "tracing")]
-pub(crate) use tracing::trace;
 
 pub mod client;
 mod common;
